@@ -1,5 +1,5 @@
 import secrets from "./secrets.service";
-import storage from "./storage.service";
+import {storageService} from "./storage.service";
 import http from "./http.service";
 
 
@@ -23,28 +23,34 @@ const STORAGE_KEYS = {
 
 
 async function currentConditions(cityCode = 213225) {
+    
 	const endpoint = `currentconditions/${VERSION}/${cityCode}?apikey=${API}`;
-    const data = await http.get(BASE_URL, endpoint, data)
-    storage.store(STORAGE_KEYS.corrent , data)
+    const data = await storageService.load(STORAGE_KEYS.current) 
+                    || http.get(BASE_URL, endpoint, data)
+    storageService.store(STORAGE_KEYS.current , data)
+    
     
     console.log(data);
-    return data
+    return data[0]
 }
 
 async function forecasts5Days(cityCode = 213225) {
 	const endpoint = `forecasts/${VERSION}/daily/5day`;
-    const data = await http.get(BASE_URL, endpoint, data)
-    storage.store(STORAGE_KEYS.corrent , data)
+    const data = await  storageService.load(STORAGE_KEYS.forecasts5Days) 
+                     || http.get(BASE_URL, endpoint, data)
+    storageService.store(STORAGE_KEYS.forecasts5Days , data)
 
     console.log(data);
-    return data
+    return data[0]
 }
 
-async function autocomplete(search) {
+async function autocomplete(search = null) {
+    if (!search) return
+
 	const endpoint = `locations/${VERSION}/cities/autocomplete`;
     const data = await http.get(BASE_URL, endpoint, data)
-    storage.store(STORAGE_KEYS.corrent , data)
+    storageService.store(STORAGE_KEYS.corrent , data)
 
     console.log(data);
-    return data
+    return data[0]
 }
