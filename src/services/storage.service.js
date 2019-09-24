@@ -3,8 +3,8 @@ export const storageService = {
   load
 };
 
-function store(key, any) {
-  localStorage[key] = JSON.stringify(any);
+function store(key, data) {
+    localStorage[key] = JSON.stringify(data)
 }
 
 function load(key) {
