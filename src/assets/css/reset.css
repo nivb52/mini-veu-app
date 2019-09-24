@@ -1,0 +1,23 @@
+/**
+ * ----------------------------------------
+ * RESETS : GLOBAL CSS / SCSS : RESETS
+ * ----------------------------------------
+ */
+ *,
+ ::after,
+ ::before,
+ html {
+   text-align: right;
+   box-sizing: border-box;
+ }
+ button,
+ input,
+ select,
+ textarea {
+   margin: 0;
+ }
+ html,
+ body {
+   height: 100%;
+ }
+ 
