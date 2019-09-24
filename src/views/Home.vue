@@ -1,16 +1,39 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>main page</h1>
+  <div>
+    <h1>home</h1>
+    <input type="text" name="search" @keydown="search" v-model="city" />
+    <button type="submit">search</button>
+    <CurrentForecast v-if="currentWeather" :weatherData="currentWeather" />
+  
+  
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from "@/components/HelloWorld.vue";
+import DayForecast from "@/cmps/DayForecast";
+import CurrentForecast from "@/cmps/CurrentForecast";
+import weatherService from '@/services/weather.service.js'
+import  debounce  from "lodash.debounce"
 
 export default {
   name: "home",
-  components: {}
+  components: {
+    DayForecast,
+    CurrentForecast
+  },
+  data() {
+    return {
+      city: "Tel-Aviv",
+      currentWeather : null
+    };
+  },
+  async mounted(){
+    this.currentWeather =  await weatherService.currentConditions()
+  },
+  methods: {
+    search:  debounce(function() { 
+        console.log('calling ajax api ' ,this.city);
+       }, 300)
+  }
 };
 </script>
