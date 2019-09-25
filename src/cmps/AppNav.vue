@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div class="flex nav">
     <router-link to="/">Home</router-link>
     <router-link to="/favorites">favorites</router-link>
   </div>
@@ -10,16 +10,17 @@ export default {};
 </script>
 
 <style lang="scss">
-#nav {
-  display: flex;
-  justify-content: flex-end;
+@import "@/assets/css/main.scss";
 
+.nav {
+  padding: 2rem 2rem 0 0;
+  justify-content: flex-end;
   a {
     font-weight: bold;
-    padding-right: 1rem;
-    color: #2c3e50;
+    text-transform: capitalize;
+    padding-right: 1.5rem;
     &.router-link-exact-active {
-      color: #42b983;
+      color: $color_link_active;
     }
   }
 }
