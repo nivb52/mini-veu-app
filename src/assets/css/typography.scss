@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito |Merriweather&display=swap');
+// addd to the import: | Roboto+Slab
+    // font-family: 'Roboto Slab', serif; 
+    
+    
+.title, .subtitle, h1 ,h2, h3 {
+	
+	font-family: 'Merriweather', serif;
+    text-align: center;
+		color: $color_1;
+}
+
+.title, h1 {
+	font-weight: 700;
+	font-size: $xlarge-font;
+}
+.subtitle, h2 {
+	font-size: $large-font;
+}
+h3 {
+	font-size: $medium-font;
+}
+
+span {
+ font-size: 1rem;
+}
+
+a {
+	color: $color_link;
+	font-size: 16px;
+	font-weight: 400;
+	transition: all .3s ease-in-out;
+}
+
+a:focus, a:active, a:visited {
+	outline: none;
+	text-decoration: none;
+	color: $color_link;
+}
+
+a:hover {
+	color: $color_link_hover;
+	text-decoration: none;
+}
