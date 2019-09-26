@@ -13,14 +13,15 @@ export default {};
 @import "@/assets/css/main.scss";
 
 .nav {
-  padding: 2rem 2rem 0 0;
+  padding: 1rem 2rem 1rem 0;
+  background-color: $white-color;
   justify-content: flex-end;
   a {
     font-weight: bold;
     text-transform: capitalize;
     padding-right: 1.5rem;
     &.router-link-exact-active {
-      color: $color_link_active;
+      color: $black-color;//$color_link_active;
     }
   }
 }
