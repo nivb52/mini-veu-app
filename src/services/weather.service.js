@@ -1,56 +1,63 @@
 import secrets from "./secrets.service";
-import {storageService} from "./storage.service";
+// import { storageService } from "./storage.service";
 import http from "./http.service";
 
-
 export default {
-    currentConditions,
-    forecasts5Days,
-    autocomplete
+  currentConditions,
+  forecasts5Days,
+  autocomplete,
+  getLanLonWeather
 };
 
-
 const BASE_URL = `http://dataservice.accuweather.com/`;
-const VERSION = 'v1';
-const API = secrets.api;
+const VERSION = "v1";
+let API = secrets.api;
 
-const STORAGE_KEYS = {
-    current : 'current-conditions',
-    forecasts5Days: '5-days-forecasts',
-    autocomplete : 'autocomplete'
+
+async function currentConditions(cityKey = 215854) {
+  try {
+    const endpoint = `currentconditions/${VERSION}/${cityKey}?apikey=${API}`;
+    const weatherData = await http.get(BASE_URL, endpoint);
+    return weatherData;
+  } catch (err) {
+    _errorHandeling(err)
+  }
+}
+
+async function forecasts5Days(cityKey = 215854) {
+  try {
+    const endpoint = `forecasts/${VERSION}/daily/5day/${cityKey}?apikey=${API}`;
+    const forecastData = await http.get(BASE_URL, endpoint);
+    return forecastData;
+  } catch (err) {
+    _errorHandeling(err)
+  }
+}
+
+async function autocomplete(term) {
+  if (!term) return;
+  try {
+    const endpoint = `locations/${VERSION}/cities/autocomplete?apikey=${API}&q=${term}`;
+    const res = await http.get(BASE_URL, endpoint);
+    return res;
+  } catch (err) {
+    _errorHandeling(err)
+  }
+}
+async function getLanLonWeather(term) {
+  if (!term) return;
+  try {
+    const endpoint = `locations/${VERSION}/cities/geoposition/search?apikey=${API}&q=${lat}%2C${lon}`;
+    const res = await http.get(BASE_URL, endpoint);
+    return res;
+  } catch (err) {
+    _errorHandeling(err)
+  }
 }
 
 
 
-async function currentConditions(cityCode = 213225) {
-    
-	const endpoint = `currentconditions/${VERSION}/${cityCode}?apikey=${API}`;
-    const data = await storageService.load(STORAGE_KEYS.current) 
-                    || http.get(BASE_URL, endpoint, data)
-    storageService.store(STORAGE_KEYS.current , data)
-    
-    
-    console.log(data);
-    return data[0]
-}
-
-async function forecasts5Days(cityCode = 213225) {
-	const endpoint = `forecasts/${VERSION}/daily/5day`;
-    const data = await  storageService.load(STORAGE_KEYS.forecasts5Days) 
-                     || http.get(BASE_URL, endpoint, data)
-    storageService.store(STORAGE_KEYS.forecasts5Days , data)
-
-    console.log(data);
-    return data[0]
-}
-
-async function autocomplete(search = null) {
-    if (!search) return
-
-	const endpoint = `locations/${VERSION}/cities/autocomplete`;
-    const data = await http.get(BASE_URL, endpoint, data)
-    storageService.store(STORAGE_KEYS.corrent , data)
-
-    console.log(data);
-    return data[0]
+function _errorHandeling(err) {
+    // if (err.status === 401) 
+    throw err
 }

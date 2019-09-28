@@ -7,19 +7,19 @@ export default {
   }
 };
 
-async function ajax(
-  BASE_URL,  endpoint,
-  method = "get",  data = null,  params = null
-) {
+async function ajax(  BASE_URL,  endpoint,
+  method = "get",  data = null,  params = null) {
   try {
     const res = await axios({
+      config: {headers: {"Accept-Encoding": "gzip"}},
       url: `${BASE_URL}${endpoint}`,
       method,
       data,
       params
     });
-    return res.data;
+    if (res.status >= 200 && res.status < 300) return res.data;
+    else return error.response
   } catch (err) {
-    throw err;
+    return error.response
   }
 }
