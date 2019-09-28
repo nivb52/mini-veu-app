@@ -47,8 +47,8 @@
 <script>
 import defaultService from '@/services/default.service.js'
 import ErrorBoundary from "@/cmps/helpers/ErrorBoundary.vue";
-import { ToastProgrammatic as Toast } from "buefy";
-import "buefy/dist/buefy.css";
+// import { ToastProgrammatic as Toast } from "buefy";
+// import "buefy/dist/buefy.css";
 
 export default {
   name: "currentWeather",
@@ -118,6 +118,7 @@ export default {
     likeClicked() {
       this.like = !this.like;
       const clickedCity = this.city;
+      clickedCity.weatherData = this.weatherData;
       if (this.like) {
         this.$store.dispatch({
           type: "likeCity",

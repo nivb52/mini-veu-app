@@ -34,13 +34,11 @@ export default {
   data() {
     return {
       autocompleteItems: [],
-      isAjaxing: "",
-      cityKey: "",
       bgImg: "bgimg/sunny.jpg"
     };
   },
   async created() {
-    const pickedCity = this.city;
+    const pickedCity = this.$store.getters.currentCity;
 
     try {
       await this.$store.dispatch({
@@ -72,37 +70,42 @@ export default {
         LocalizedName: this.$route.params.city,
         Key: this.$route.params.id
       };
-      return currCity.Key || this.$store.getters.currentCity;
+      return currCity || this.$store.getters.currentCity;
     }
   },
   methods: {
     async onSearch(term) {
       if (!term || this.cityKey) return;
       const cityItems = await weatherService.autocomplete(term);
-      const key1 = "LocalizedName";
-      const key2 = "Key";
+      const Name = "LocalizedName",
+        Code = "Key";
       this.autocompleteItems = cityItems.map(item => {
         let city = {};
-        city[key1] = item[key1];
-        city[key2] = item[key2];
+        city[Name] = item[Name];
+        city[Code] = item[Code];
         return city;
       });
-      console.log("api cityItems: ", this.autocompleteItems);
     },
 
     async onPickCity(pickedCity) {
       if (!pickedCity) return;
       const { LocalizedName, Key } = pickedCity;
-      this.$router.push(`/city/key=${Key}&city=${LocalizedName}`); // /city/215854&new-york
       try {
         await this.$store.dispatch({
           type: "changeCurrCity",
           pickedCity
         });
-        // await this.$store.dispatch({
-        //   type: "loadForecast",
-        //   pickedCity
-        // });
+
+        this.$store.dispatch({
+          type: "loadForecast",
+          pickedCity
+        });
+        this.$store.dispatch({
+          type: "loadWeather",
+          pickedCity
+        });
+
+        this.$router.push(`/city/key=${Key}&city=${LocalizedName}`); // /city/215854&new-york
       } catch (err) {
         this.createToast();
         console.error("Could not load error:", err);
@@ -113,5 +116,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/assets/css/pages/homepage.scss";
-
 </style>
