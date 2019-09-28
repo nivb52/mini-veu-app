@@ -1,7 +1,14 @@
 <template>
-  <div class="flex nav">
-    <router-link to="/">Home</router-link>
-    <router-link to="/favorites">favorites</router-link>
+  <div class="nav">
+    <div class=" logo">Weather App</div>
+    <ul class="flex navigation">
+      <li>
+        <router-link to="/">Home</router-link>
+      </li>
+      <li>
+        <router-link to="/favorites">favorites</router-link>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -13,15 +20,21 @@ export default {};
 @import "@/assets/css/main.scss";
 
 .nav {
-  padding: 1rem 2rem 1rem 0;
+  padding: 1rem 1.5rem 1rem 0;
   background-color: $white-color;
-  justify-content: flex-end;
+  .logo {
+    float: left;
+  }
+  .navigation {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
   a {
     font-weight: bold;
     text-transform: capitalize;
     padding-right: 1.5rem;
     &.router-link-exact-active {
-      color: $black-color;//$color_link_active;
+      color: $black-color; //$color_link_active;
     }
   }
 }
