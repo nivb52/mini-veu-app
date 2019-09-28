@@ -20,6 +20,16 @@ export default new Router({
       path: "/about",
       name: "about",
       component: () => import("./views/About.vue")
+    },
+    {
+      path: "/city/key=:id?&city=:city?",
+      name: "city",
+      component: Home
+    },
+    {
+      path: '*',
+      name: 'page-not-found',
+      component: () => import("./cmps/helpers/PageNotFound.vue")
     }
   ]
 });
