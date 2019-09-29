@@ -18,10 +18,10 @@
     </div>
 
     <div class="city-box">
-      <h1>{{cityName}}</h1>
+      <h1 class="is-white is-black-bcg-transperent">{{cityName}}</h1>
     </div>
     <error-boundary>
-      <div v-if="!weatherData" class="flex centered is-white">Loading ...</div>
+      <div v-if="!weatherData[0]" class="flex centered is-white">Loading ...</div>
       <div v-else>
         <div class="row">
           <div class="weather">
@@ -93,12 +93,12 @@ export default {
       else return this.city;
     },
     cTemperature() {
-      return this.weatherData && this.weatherData[0].Temperature
+      return this.weatherData[0] && this.weatherData[0].Temperature
         ? this.weatherData[0].Temperature.Metric.Value + " °C"
         : "";
     },
     fTemperature() {
-      return this.weatherData && this.weatherData[0].Temperature
+      return this.weatherData[0] && this.weatherData[0].Temperature
         ? this.weatherData[0].Temperature.Imperial.Value + " °F"
         : "";
     },
@@ -106,7 +106,7 @@ export default {
       return this.weatherData[0] ? this.weatherData[0].WeatherText : "";
     },
     isDayTime() {
-      if (!this.weatherData || !this.weatherData[0].IsDayTime) return "";
+      if (!this.weatherData[0] || !this.weatherData[0].IsDayTime) return "";
       return this.weatherData[0].IsDayTime ? "day time" : "night time";
     },
     hasPrecipitation() {
@@ -178,56 +178,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/css/main.scss";
-
-.weather-box {
-  padding: 20px 0;
-  background: transparent;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-  z-index: 1;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  //   justify-items: center
-  &::after {
-    content: "";
-    position: absolute;
-    background-color: $background_color_2;
-    top: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-  }
-}
-.row {
-  line-height: 3;
-}
-.weather-icon {
-  margin-top: 1rem;
-}
-.like {
-  cursor: pointer;
-  position: relative;
-    position: absolute;
-    cursor: pointer;
-    z-index: 10;
-    top: 2vw;
-    right: 16px;
-    .like-it-symbole {
-    width: 3vw;
-    max-width: 33px;
-    min-width: 22px;
-  }
-}
-@media screen and (min-width: 900px) {
-  .like {
-    top: 12px;
-  }
-}
 </style>
