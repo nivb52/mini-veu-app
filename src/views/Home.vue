@@ -8,12 +8,12 @@
 
     <div class="weather-container">
       <CurrentWeather
-        :weatherData="weatherData"
         :city="city"
+        :weatherData="weatherData"
         :style="{ backgroundImage: 'url(' + bgImg + ')' }"
       />
 
-      <day-forecast-list :forecastData="forecastData" :city="city" />
+      <day-forecast-list :city="city" :forecastData="forecastData" />
     </div>
   </div>
 </template>
@@ -38,7 +38,11 @@ export default {
     };
   },
   async created() {
-    const pickedCity = this.$store.getters.currentCity;
+    const pickedCity = await this.$store.getters.currentCity;
+    if (typeof this.$route.params.city  === String ) {
+        (pickedCity.LocalizedName = this.$route.params.city),
+        (pickedCity.Key = this.$route.params.id);
+    }
 
     try {
       await this.$store.dispatch({
@@ -66,11 +70,15 @@ export default {
         this.bgImg = `bgimg/${this.currentWeather.WeatherText}.jpg`;
     },
     city() {
-      const currCity = {
-        LocalizedName: this.$route.params.city,
-        Key: this.$route.params.id
-      };
-      return currCity || this.$store.getters.currentCity;
+      if (typeof this.$route.params.city === String) {
+        const currCity = {
+          LocalizedName: this.$route.params.city,
+          Key: this.$route.params.id
+        };
+        return currCity;
+      } else {
+        return this.$store.getters.currentCity;
+      }
     }
   },
   methods: {
@@ -108,7 +116,6 @@ export default {
         this.$router.push(`/city/key=${Key}&city=${LocalizedName}`); // /city/215854&new-york
       } catch (err) {
         this.createToast();
-        console.error("Could not load error:", err);
       }
     }
   }
