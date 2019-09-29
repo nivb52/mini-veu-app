@@ -2,14 +2,14 @@
   <div class="weather-box is-white">
     <div class="like">
       <img
-        v-if="!like && city"
+        v-if="!isShowLike && city"
         @click="likeClicked"
         src="@/assets/icons/heart-multiple-outline.svg"
         alt="you don't like this city yet"
         class="like-it-symbole"
       />
       <img
-        v-if="like && city"
+        v-if="isShowLike && city"
         @click="likeClicked"
         src="@/assets/icons/heart-multiple.svg"
         alt="favorite city"
@@ -38,7 +38,7 @@
           <span class="rain">{{hasPrecipitation}}</span>
         </div>
 
-        <span class="day-time">{{isDayTime}} time</span>
+        <span class="day-time">{{isDayTime}}</span>
       </div>
     </error-boundary>
   </div>
@@ -70,31 +70,35 @@ export default {
       default: defaultService.tempUnit()
     },
     cityKey: {
-      type: Number,
-      required: false,
+      type: [String, Number],
+      required: false
     }
   },
-  // CREATED => to get the favorites and show like only if need to
+  mounted() {
+    this.checkLike();
+  },
   data() {
     return {
-      like: false,
-      isError: false,
-      WeatherIcon: "img/1px.jpg"
+      like: false
     };
   },
   computed: {
+    isShowLike(){
+      this.checkLike()
+      return this.like
+    },
     cityName() {
       if (!this.city) return "";
       if (typeof this.city === "object") return this.city["LocalizedName"];
       else return this.city;
     },
     cTemperature() {
-      return this.weatherData && this.weatherData.Temperature
+      return this.weatherData && this.weatherData[0].Temperature
         ? this.weatherData[0].Temperature.Metric.Value + " °C"
         : "";
     },
     fTemperature() {
-      return this.weatherData && this.weatherData.Temperature
+      return this.weatherData && this.weatherData[0].Temperature
         ? this.weatherData[0].Temperature.Imperial.Value + " °F"
         : "";
     },
@@ -102,8 +106,8 @@ export default {
       return this.weatherData[0] ? this.weatherData[0].WeatherText : "";
     },
     isDayTime() {
-      if (!this.weatherData || !this.weatherData.IsDayTime) return "";
-      return this.weatherData[0].IsDayTime ? "day" : "night";
+      if (!this.weatherData || !this.weatherData[0].IsDayTime) return "";
+      return this.weatherData[0].IsDayTime ? "day time" : "night time";
     },
     hasPrecipitation() {
       if (!this.weatherData[0] || !this.weatherData[0].HasPrecipitation)
@@ -122,21 +126,27 @@ export default {
   },
   methods: {
     updateWeather() {
-      const pickedCity = this.cityKey? { Key : cityKey} : this.city
-        this.$store.dispatch({
-          type: "loadWeather",
-          pickedCity
-        });
-        //EMIT
+      const pickedCity = this.cityKey ? { Key: cityKey } : this.city;
+      this.$store.dispatch({
+        type: "loadWeather",
+        pickedCity
+      });
+      //EMIT
+    },
+    checkLike() {
+      const clickedCity = this.cityKey || this.city['Key'];
+      
+      const { myFavorites } = this.$store.getters;
+      const isFavorite = myFavorites.filter(
+        city => city.Key === clickedCity
+      );
+      
+      if (isFavorite.length === 1) this.like = true;
+      else if(isFavorite.length === 0) this.like = false;
     },
     likeClicked() {
+      this.checkLike();
       const clickedCity = this.city;
-      const { myFavorites } = this.$store.getters;
-      const isDuplicated = myFavorites.filter(
-        city => city.Key === clickedCity.Key
-      );
-      if (isDuplicated.length > 2) return;
-
       this.like = !this.like;
 
       clickedCity.weatherData = this.weatherData;
@@ -204,20 +214,20 @@ export default {
 .like {
   cursor: pointer;
   position: relative;
-  .like-it-symbole {
     position: absolute;
     cursor: pointer;
     z-index: 10;
-    top: -1vw;
+    top: 2vw;
     right: 16px;
+    .like-it-symbole {
     width: 3vw;
     max-width: 33px;
     min-width: 22px;
   }
 }
 @media screen and (min-width: 900px) {
-  .like .like-it-symbole {
-    top: -21px;
+  .like {
+    top: 12px;
   }
 }
 </style>
