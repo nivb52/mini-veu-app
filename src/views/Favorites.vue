@@ -10,6 +10,7 @@
         is-3-desktop is-4-tablet is-full-mobile " 
         v-for="(favorite,index) in myFavorites" :key="index">
           <CurrentWeather
+            class="favorites-card"
             :weatherData="favorite.weatherData"
             :city="favorite.LocalizedName"
             :cityKey="favorite.Key"
@@ -40,9 +41,11 @@ export default {
   },
   computed: {
     myFavorites() {
-      console.log(this.$store.getters.myFavorites);
       return this.$store.getters.myFavorites;
     }
   },
 };
 </script>
+<style lang="scss">
+@import "@/assets/css/pages/favorites.scss";
+</style>
