@@ -48,7 +48,7 @@ async function autocomplete(term) {
     _errorHandeling(err);
   }
 }
-async function getLanLonWeather(pos, cb) {
+async function getLanLonWeather(pos) {
   try {
     const loc = await pos.coords
     if (!loc || !loc.latitude || !loc.longitude) return
@@ -61,7 +61,7 @@ async function getLanLonWeather(pos, cb) {
     const res = await http.get(BASE_URL, endpoint, data);
     console.log('res ',res);
     // return res
-    return cb(res) 
+    return res 
   } catch (err) {
     _errorHandeling(err);
   }

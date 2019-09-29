@@ -88,7 +88,6 @@ export default {
         try {
           const pickedCity = await navigator.geolocation.getCurrentPosition(
             weatherService.getLanLonWeather)
-          // setTimeout(() => console.log("pickedCity home view ", pickedCity), 10);
         } catch (err) {
           this.createToast();
         }
