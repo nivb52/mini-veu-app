@@ -50,10 +50,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/css/main.scss";
-
-.other-days {
-  background-color: rgba(255, 255, 255, 0.7);
-  flex-direction: column;
-  color: $color_2;
-}
 </style>
