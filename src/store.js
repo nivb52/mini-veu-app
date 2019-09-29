@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     currentWeather: [] ,
     forecastWeather: {} ,
-    favorites: [], // ID - NAME CURRENT-WHEATER
+    favorites: utillService.getSession(), 
     currCity: defaultService.city()
   },
   mutations: {
