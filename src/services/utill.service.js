@@ -1,6 +1,8 @@
 export default {
   dayNameFromUTC,
-  getCurrLocation
+  getCurrLocation,
+  setSession,
+  getSession
 };
 
 function dayNameFromUTC(day) {
@@ -21,4 +23,11 @@ function getCurrLocation() {
     const {latitude, longitude} = pos.coords
     return {latitude, longitude};
   });
+}
+
+async function setSession(data,key= 'favorites'){
+  sessionStorage.setItem(key, JSON.stringify(data));
+}
+function getSession(key = 'favorites'){
+  return JSON.parse(sessionStorage.getItem(key)) || null;
 }
