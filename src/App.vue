@@ -20,6 +20,6 @@ export default {
 @import "@/assets/css/main.scss";
 
 .animated {
-  animation: fade-in-bottom 0.6s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+  animation: fade-in 0.3s cubic-bezier(0.39, 0.575, 0.565, 1) both;
 }
 </style>
