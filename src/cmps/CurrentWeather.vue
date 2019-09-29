@@ -2,14 +2,14 @@
   <div class="weather-box is-white">
     <div class="like">
       <img
-        v-if="!like"
+        v-if="!like && city"
         @click="likeClicked"
         src="@/assets/icons/heart-multiple-outline.svg"
         alt="you don't like this city yet"
         class="like-it-symbole"
       />
       <img
-        v-if="like"
+        v-if="like && city"
         @click="likeClicked"
         src="@/assets/icons/heart-multiple.svg"
         alt="favorite city"
@@ -25,30 +25,29 @@
       <div v-else>
         <div class="row">
           <div class="weather">
-            <img class="weather-icon" alt="weather-icon" :src="WeatherIcon" />
+            <img class="weather-icon" alt="weather-icon" :src="getWeatherIcon" />
           </div>
           <span class="degree">{{fTemperature}}</span>
         </div>
 
         <div class="row">
-          <div class="text-temp">{{WeatherText}}</div>
+          <div class="text-temp">{{weatherText}}</div>
         </div>
 
         <div class="row">
-          <span class="rain">{{HasPrecipitation}}</span>
+          <span class="rain">{{hasPrecipitation}}</span>
         </div>
 
-        <span class="day-time">{{IsDayTime}} time</span>
+        <span class="day-time">{{isDayTime}} time</span>
       </div>
     </error-boundary>
   </div>
 </template>
 
 <script>
-import defaultService from '@/services/default.service.js'
+import defaultService from "@/services/default.service.js";
+import utillService from "@/services/utill.service.js";
 import ErrorBoundary from "@/cmps/helpers/ErrorBoundary.vue";
-// import { ToastProgrammatic as Toast } from "buefy";
-// import "buefy/dist/buefy.css";
 
 export default {
   name: "currentWeather",
@@ -59,20 +58,23 @@ export default {
     weatherData: {
       type: Array,
       required: true,
-      default: () => [],
+      default: () => []
     },
     city: {
-      type: Object,
-      required: false,
-      default: defaultService.city()
+      type: [Object, String],
+      required: true
     },
     tempUnit: {
       type: String,
       required: false,
       default: defaultService.tempUnit()
+    },
+    cityKey: {
+      type: Number,
+      required: false,
     }
   },
-  // ["city", "weatherData"],
+  // CREATED => to get the favorites and show like only if need to
   data() {
     return {
       like: false,
@@ -82,43 +84,63 @@ export default {
   },
   computed: {
     cityName() {
-      const cityName = this.city ? this.city["LocalizedName"] : "";
-      return cityName;
+      if (!this.city) return "";
+      if (typeof this.city === "object") return this.city["LocalizedName"];
+      else return this.city;
     },
     cTemperature() {
       return this.weatherData && this.weatherData.Temperature
-        ? this.weatherData.Temperature.Metric.Value + " °C"
+        ? this.weatherData[0].Temperature.Metric.Value + " °C"
         : "";
     },
     fTemperature() {
       return this.weatherData && this.weatherData.Temperature
-        ? this.weatherData.Temperature.Imperial.Value + " °F"
+        ? this.weatherData[0].Temperature.Imperial.Value + " °F"
         : "";
     },
-    WeatherText() {
-      return this.weatherData ? this.weatherData.WeatherText : "";
+    weatherText() {
+      return this.weatherData[0] ? this.weatherData[0].WeatherText : "";
     },
-    IsDayTime() {
+    isDayTime() {
       if (!this.weatherData || !this.weatherData.IsDayTime) return "";
-      return this.weatherData.IsDayTime ? "day" : "night";
+      return this.weatherData[0].IsDayTime ? "day" : "night";
     },
-    HasPrecipitation() {
-      if (!this.weatherData) return "";
-      return this.weatherData.HasPrecipitation
+    hasPrecipitation() {
+      if (!this.weatherData[0] || !this.weatherData[0].HasPrecipitation)
+        return "";
+      return this.weatherData[0].HasPrecipitation
         ? "precipitation expected"
         : "no precipitation expected";
+    },
+    getWeatherIcon() {
+      if (!this.weatherData[0] || !this.weatherData[0].WeatherIcon)
+        return "img/1px.jpg";
+      const iconNum = "" + this.weatherData[0].WeatherIcon;
+      const iconNumFixed = iconNum.padStart(2, "0");
+      return `https://developer.accuweather.com/sites/default/files/${iconNumFixed}-s.png`;
     }
   },
   methods: {
-    getWeatherIcon() {
-      const iconNum = "" + this.weatherData.WeatherIcon;
-      const iconNumFixed = iconNum.padStart(2, "0");
-      return `https://developer.accuweather.com/sites/default/files/${iconNumFixed}-s.png`;
+    updateWeather() {
+      const pickedCity = this.cityKey? { Key : cityKey} : this.city
+        this.$store.dispatch({
+          type: "loadWeather",
+          pickedCity
+        });
+        //EMIT
     },
     likeClicked() {
-      this.like = !this.like;
       const clickedCity = this.city;
+      const { myFavorites } = this.$store.getters;
+      const isDuplicated = myFavorites.filter(
+        city => city.Key === clickedCity.Key
+      );
+      if (isDuplicated.length > 2) return;
+
+      this.like = !this.like;
+
       clickedCity.weatherData = this.weatherData;
+
       if (this.like) {
         this.$store.dispatch({
           type: "likeCity",
@@ -130,10 +152,14 @@ export default {
           clickedCity
         });
       }
+      utillService.setSession(this.$store.getters.myFavorites);
     }
   },
   watch: {
     city: function(val) {
+      return val;
+    },
+    weatherData: function(val) {
       return val;
     }
   }
