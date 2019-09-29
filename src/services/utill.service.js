@@ -1,6 +1,5 @@
 export default {
   dayNameFromUTC,
-  getCurrLocation,
   setSession,
   getSession
 };
@@ -18,16 +17,10 @@ function dayNameFromUTC(day) {
   ][dayIndex];
 }
 
-function getCurrLocation() {
-  navigator.geolocation.getCurrentPosition(pos => {
-    const {latitude, longitude} = pos.coords
-    return {latitude, longitude};
-  });
-}
-
-async function setSession(data,key= 'favorites'){
+async function setSession(data, key = "favorites") {
   sessionStorage.setItem(key, JSON.stringify(data));
 }
-function getSession(key = 'favorites'){
+function getSession(key = "favorites") {
   return JSON.parse(sessionStorage.getItem(key)) || null;
 }
+

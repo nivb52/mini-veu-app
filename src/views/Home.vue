@@ -2,10 +2,9 @@
   <div class="main-container">
     <div class="bg-image" :style="{ backgroundImage: 'url(' + getBgImg + ')' }"></div>
     <div class="flex centered">
-      <!-- <SearchInput  /> -->
       <Autocomplete @onSearch="onSearch" @onPickCity="onPickCity" :items="autocompleteItems" />
     </div>
-
+    <button class="myLoc" @click="getMyLoc">get my location</button>
     <div class="weather-container">
       <CurrentWeather
         :city="city"
@@ -33,13 +32,16 @@ export default {
   },
   data() {
     return {
-      autocompleteItems: [],
+      autocompleteItems: []
     };
   },
   async created() {
-    const pickedCity = await this.$store.getters.currentCity;
-    if (typeof this.$route.params.city  === String ) {
-        (pickedCity.LocalizedName = this.$route.params.city),
+    const pickedCity = this.$store.getters.currentCity;
+    if (
+      typeof this.$route.params.city === String &&
+      this.$route.params.city !== "undefined"
+    ) {
+      (pickedCity.LocalizedName = this.$route.params.city),
         (pickedCity.Key = this.$route.params.id);
     }
 
@@ -64,7 +66,8 @@ export default {
       return this.$store.getters.currentWeatherToShow;
     },
     getBgImg() {
-      if (!this.currentWeather || !this.currentWeather[0].WeatherText) return "bgimg/sunny.jpg"
+      if (!this.currentWeather || !this.currentWeather[0].WeatherText)
+        return "bgimg/sunny.jpg";
       else return `bgimg/${this.currentWeather[0].WeatherText}.jpg`;
     },
     city() {
@@ -80,11 +83,23 @@ export default {
     }
   },
   methods: {
+    async getMyLoc() {
+      if (navigator.geolocation) {
+        try {
+          const pickedCity = await navigator.geolocation.getCurrentPosition(
+            weatherService.getLanLonWeather)
+          // setTimeout(() => console.log("pickedCity home view ", pickedCity), 10);
+        } catch (err) {
+          this.createToast();
+        }
+      } else this.createToast("Geolocation is not supported by this browser.");
+    },
     async onSearch(term) {
       if (!term || this.cityKey) return;
       const cityItems = await weatherService.autocomplete(term);
-      const Name = "LocalizedName",
-        Code = "Key";
+      const Name = "LocalizedName";
+      const Code = "Key";
+
       this.autocompleteItems = cityItems.map(item => {
         let city = {};
         city[Name] = item[Name];
