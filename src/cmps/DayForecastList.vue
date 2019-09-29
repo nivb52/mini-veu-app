@@ -28,7 +28,6 @@ export default {
     city: {
       type: Object,
       required: false,
-      default: defaultService.city()
     },
     tempUnit: {
       type: String,
@@ -36,7 +35,6 @@ export default {
       default: defaultService.tempUnit()
     }
   },
-  // props: ["city", "forecastData"], 
   computed: {
     dailyForecasts() {
       return this.forecastData["DailyForecasts"];
