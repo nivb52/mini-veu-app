@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <div class="bg-image" :style="{ backgroundImage: 'url(' + bgImg + ')' }"></div>
+    <div class="bg-image" :style="{ backgroundImage: 'url(' + getBgImg + ')' }"></div>
     <div class="flex centered">
       <!-- <SearchInput  /> -->
       <Autocomplete @onSearch="onSearch" @onPickCity="onPickCity" :items="autocompleteItems" />
@@ -10,7 +10,7 @@
       <CurrentWeather
         :city="city"
         :weatherData="weatherData"
-        :style="{ backgroundImage: 'url(' + bgImg + ')' }"
+        :style="{ backgroundImage: 'url(' + getBgImg + ')' }"
       />
 
       <day-forecast-list :city="city" :forecastData="forecastData" />
@@ -34,7 +34,6 @@ export default {
   data() {
     return {
       autocompleteItems: [],
-      bgImg: "bgimg/sunny.jpg"
     };
   },
   async created() {
@@ -65,9 +64,8 @@ export default {
       return this.$store.getters.currentWeatherToShow;
     },
     getBgImg() {
-      // CHECK ## maybe delete it
-      if (this.currentWeather && this.curremtWeather.WeatherText)
-        this.bgImg = `bgimg/${this.currentWeather.WeatherText}.jpg`;
+      if (!this.currentWeather || !this.currentWeather[0].WeatherText) return "bgimg/sunny.jpg"
+      else return `bgimg/${this.currentWeather[0].WeatherText}.jpg`;
     },
     city() {
       if (typeof this.$route.params.city === String) {
