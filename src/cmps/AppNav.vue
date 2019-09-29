@@ -1,6 +1,10 @@
 <template>
   <div class="nav">
-    <div class=" logo">Weather App</div>
+    <div class="logo">
+      <img class="logo-img" src="img/logo.png" alt="logo" srcset="">
+    
+    
+    </div>
     <ul class="flex navigation">
       <li>
         <router-link to="/">Home</router-link>
@@ -19,23 +23,4 @@ export default {};
 <style lang="scss">
 @import "@/assets/css/main.scss";
 
-.nav {
-  padding: 1rem 1.5rem 1rem 0;
-  background-color: $white-color;
-  .logo {
-    float: left;
-  }
-  .navigation {
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  a {
-    font-weight: bold;
-    text-transform: capitalize;
-    padding-right: 1.5rem;
-    &.router-link-exact-active {
-      color: $black-color; //$color_link_active;
-    }
-  }
-}
 </style>
