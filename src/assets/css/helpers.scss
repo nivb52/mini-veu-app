@@ -18,3 +18,15 @@
 .is-grey {
     color: $grey-color;
 }
+.is-white-bcg {
+    background-color: $white-color;
+}
+.is-black-bcg {
+    background-color: $black-color;
+}
+.is-black-bcg-transperent {
+    background-color: rgba($black-color,0.7);
+}
+.is-grey-bcg {
+    background-color: $grey-color;
+}
