@@ -17,9 +17,8 @@ async function ajax(  BASE_URL,  endpoint,
       data,
       params
     });
-    if (res.status >= 200 && res.status < 300) return res.data;
-    else return error.response
+    return res.data;
   } catch (err) {
-    return error.response
+    throw err
   }
 }
