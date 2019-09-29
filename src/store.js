@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import weatherService from "@/services/weather.service.js";
 import defaultService from '@/services/default.service.js'
+import utillService from '@/services/utill.service.js'
 
 Vue.use(Vuex);
 
@@ -9,7 +10,7 @@ export default new Vuex.Store({
   state: {
     currentWeather: [] ,
     forecastWeather: {} ,
-    favorites: [{}], // ID - NAME CURRENT - WHEATER
+    favorites: [], // ID - NAME CURRENT-WHEATER
     currCity: defaultService.city()
   },
   mutations: {
@@ -22,8 +23,10 @@ export default new Vuex.Store({
     setForcastWeather(state, context) {  
       state.forecastWeather = context.forecastWeather
     },
+    setFavorites({favorites}) {
+      favorites = utillService.setSession(favorites)
+    },
     addFavorites({favorites}, {clickedCity}) {
-      console.log(favorites);
       favorites.push(clickedCity)
     },
     removeFavorites({favorites}, {clickedCity}){
@@ -60,17 +63,20 @@ export default new Vuex.Store({
     },
     async unlikeCity({commit},{clickedCity}) {
       commit({type: 'removeFavorites', clickedCity})
+    },
+    async loadFavorites({commit},{favorites}) {
+      commit({type: 'setFavorites'}, favorites)
     }
   },
   getters: {
+    currentCity({currCity}) {
+      return currCity
+    },
     currentWeatherToShow({currentWeather}) {
       return currentWeather
     },
     currentForecastToShow({forecastWeather}) {
       return forecastWeather
-    },
-    currentCity({currCity}) {
-      return currCity
     },
     myFavorites({favorites}) {
       return favorites
