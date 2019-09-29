@@ -3,13 +3,13 @@ $white-color: #fff;
 $black-color: #222;
 $grey-color: #9098a9;
 
-$color_1: #d1e8f9;
+$color_1: #6a9ab9;
 $color_2: #222; 
-$color_3: #496a81;
+$color_1_darker: #496a81;
 
 $color_link: #6a9ab9;
-$color_link_active: #fff;
-$color_link_hover: #5d88a3;
+$color_link_active: $color_1_darker;
+$color_link_hover: $color_1_darker;
 
 $background_color_1: #555;
 $background_color_2: rgba(0, 0, 0, 0.3);
