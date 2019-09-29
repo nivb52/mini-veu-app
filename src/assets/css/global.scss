@@ -9,4 +9,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+.nav {
+  padding: 1rem 1.5rem 1rem 0;
+  background-color: $white-color;
+  .logo {
+    float: left;
+    font-family: Merriweather;
+    font-weight: 700;
+    padding-left: 10px;
+    color: $color-1;
+  }
+  .logo-img {
+    width: 6vw;
+    max-width: 37px;
+    min-width: 35px;
+  }
+  .navigation {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  a {
+    font-weight: bold;
+    text-transform: capitalize;
+    padding-right: 1.5rem;
+    text-align: center;
+    &.router-link-exact-active {
+      color: $color_link_active;
+      border-bottom: 1px solid $color_link_active;
+    }
+  }
+}
