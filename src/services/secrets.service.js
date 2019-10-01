@@ -1,4 +1,5 @@
-const api = "yeBFmXPd1QcBZU3oxFAbu52kR270mZqU";
+const api = "wG7LqgKpiZEuhVL3s6UEOIhxhbAkAyB5";
+
 
 export default {
   api
