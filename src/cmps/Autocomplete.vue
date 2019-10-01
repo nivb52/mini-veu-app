@@ -68,7 +68,7 @@ export default {
 
       const isEnglish = val.search(wantedInput)
       if (isEnglish !== -1) {
-        this.createToast('english only')
+        this.createToast('english only','is-info')
         this.term = val.replace(wantedInput, '')
       } else this.onChangeDebounce()
     }
@@ -77,7 +77,6 @@ export default {
     onChange() {
         this.$emit("onSearch", this.term);
         this.isLoading = true;
-          // if (this.isFromLocal) this.filterResults();
         this.isShowingResults = true;
         this.results = this.items
         this.isLoading = false;
@@ -116,12 +115,6 @@ export default {
       }
     },
     
-    // filterResults() {
-    //   this.results = this.items.filter(item => {
-    //     return item.toLowerCase().indexOf(this.term.toLowerCase()) > -1;
-    //   });
-    // },
-
   },
 
   mounted() {
@@ -137,32 +130,4 @@ export default {
 <style lang="scss" scope>
 @import "@/assets/css/utills/search.scss";
 
-.autocomplete {
-  position: relative;
-}
-
-.autocomplete-results {
-  padding: 0;
-  margin: 0;
-  border: 1px solid #eeeeee;
-  overflow: auto;
-  width: 100%;
-  overflow-x: hidden;
-  z-index: 10;
-  position: relative;
-  background-color: rgba(255, 255, 255, 0.7);
-  color:#000;
-}
-
-.autocomplete-result {
-  text-align: left;
-  padding: 4px 2px;
-  cursor: pointer;
-}
-
-.autocomplete-result.is-active,
-.autocomplete-result:hover {
-  background-color: #4aae9b;
-  color: white;
-}
 </style>
