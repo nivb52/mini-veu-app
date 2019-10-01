@@ -4,15 +4,31 @@
     <div class="flex centered">
       <Autocomplete @onSearch="onSearch" @onPickCity="onPickCity" :items="autocompleteItems" />
     </div>
-    <button class="myLoc" @click="getMyLoc">get my location</button>
+    <div class="my-location">
+    <button 
+    @click="getMyLoc">
+      <img src="@/assets/icons/my_loc-24px.svg"  alt="get weather to your location"/>
+    </button>
+    <button  v-if="isFahrenheit"
+    @click="changeIsFahrenheit(false)">
+     °F
+    </button>
+    <button  v-else
+    @click="changeIsFahrenheit(true)">
+     °C
+    </button>
+    </div>
+
+    
     <div class="weather-container">
       <CurrentWeather
         :city="city"
+        :isFahrenheit="isFahrenheit"
         :weatherData="weatherData"
         :style="{ backgroundImage: 'url(' + getBgImg + ')' }"
       />
 
-      <day-forecast-list :city="city" :forecastData="forecastData" />
+      <day-forecast-list :city="city" :forecastData="forecastData" :isFahrenheit="isFahrenheit" />
     </div>
   </div>
 </template>
@@ -28,11 +44,12 @@ export default {
   components: {
     DayForecastList,
     CurrentWeather,
-    Autocomplete
+    Autocomplete,
   },
   data() {
     return {
-      autocompleteItems: []
+      autocompleteItems: [],
+       isFahrenheit: this.$store.getters.tempUnitToShow
     };
   },
   async created() {
@@ -66,17 +83,15 @@ export default {
       return this.$store.getters.currentWeatherToShow;
     },
     getBgImg() {
-      if (!this.currentWeather || !this.currentWeather[0].WeatherText)
-        return "bgimg/sunny.jpg";
-      else return `bgimg/${this.currentWeather[0].WeatherText}.jpg`;
+      return "bgimg/sunny.jpg";
     },
     city() {
       if (typeof this.$route.params.city === String) {
-        const currCity = {
+        const currentCity = {
           LocalizedName: this.$route.params.city,
           Key: this.$route.params.id
         };
-        return currCity;
+        return currentCity;
       } else {
         return this.$store.getters.currentCity;
       }
@@ -86,8 +101,18 @@ export default {
     async getMyLoc() {
       if (navigator.geolocation) {
         try {
-          const pickedCity = await navigator.geolocation.getCurrentPosition(
-            weatherService.getLanLonWeather)
+          navigator.geolocation.getCurrentPosition(pos => {
+            weatherService
+              .getLanLonWeather(pos.coords.latitude, pos.coords.longitude)
+              .then(async res => {
+                let pickedCity = {};
+                pickedCity["LocalizedName"] = await res["LocalizedName"];
+                pickedCity["Key"] = await res["Key"];
+                pickedCity.Key = await res.Key;
+                console.log(pickedCity);
+                this.onPickCity(pickedCity);
+              });
+          });
         } catch (err) {
           this.createToast();
         }
@@ -96,13 +121,11 @@ export default {
     async onSearch(term) {
       if (!term || this.cityKey) return;
       const cityItems = await weatherService.autocomplete(term);
-      const Name = "LocalizedName";
-      const Code = "Key";
 
       this.autocompleteItems = cityItems.map(item => {
         let city = {};
-        city[Name] = item[Name];
-        city[Code] = item[Code];
+        city['LocalizedName'] = item['LocalizedName'];
+        city['Key'] = item['Key'];
         return city;
       });
     },
@@ -129,6 +152,16 @@ export default {
       } catch (err) {
         this.createToast();
       }
+    },
+
+    async changeIsFahrenheit(isFahrenheit){
+      if (isFahrenheit !== true && isFahrenheit !== false) return
+      this.isFahrenheit = !this.isFahrenheit
+      this.$store.dispatch({
+        type:"changeTempUnit",
+        isFahrenheit
+      })
+
     }
   }
 };

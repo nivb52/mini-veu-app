@@ -5,7 +5,7 @@
     <div class="day">{{dayName}}</div>
 
     <div class="temp-container">
-      <span class="temp">{{maxTemp}}-{{minTemp}}</span>
+      <span class="temp">{{maxTemp | fixed}}-{{minTemp | fixed}}</span>
       <span class="degree">&nbsp; {{getTempUnit}}</span>
     </div>
   </div>
@@ -23,10 +23,10 @@ export default {
       required: true,
       default: () => {}
     },
-    tempUnit: {
-      type: String,
+    isFahrenheit: {
+      type: Boolean,
       required: false,
-      default: defaultService.tempUnit()
+      default: defaultService.isFahrenheit()
     }
   },
   computed: {
@@ -35,18 +35,28 @@ export default {
       return utillService.dayNameFromUTC(day);
     },
     maxTemp() {
-      return this.forecast.Temperature.Maximum.Value;
+      const temp = this.forecast.Temperature.Maximum.Value;
+      if (this.isFahrenheit) return temp;
+      else return ((temp - 32) * 5) / 9;
     },
     minTemp() {
-      return this.forecast.Temperature.Minimum.Value;
+      let temp = this.forecast.Temperature.Minimum.Value;
+      if (this.isFahrenheit) return temp;
+      else return ((temp - 32) * 5) / 9;
     },
     getTempUnit() {
-      return this.tempUnit;
+      return this.isFahrenheit ? " °F" : " °C";
     },
     iconImg() {
       const iconNum = "" + this.forecast.Day.Icon;
       const iconNumFixed = iconNum.padStart(2, "0");
       return `https://developer.accuweather.com/sites/default/files/${iconNumFixed}-s.png`;
+    }
+  },
+  filters: {
+    fixed: function(value) {
+      if (!value) return "";
+      return value.toFixed(0);
     }
   }
 };

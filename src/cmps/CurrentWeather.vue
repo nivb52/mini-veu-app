@@ -27,7 +27,8 @@
           <div class="weather">
             <img class="weather-icon" alt="weather-icon" :src="getWeatherIcon" />
           </div>
-          <span class="degree">{{fTemperature}}</span>
+          <span v-if="isFahrenheit" class="degree">{{fTemperature}}</span>
+          <span v-else class="degree">{{cTemperature}}</span>
         </div>
 
         <div class="row">
@@ -64,10 +65,10 @@ export default {
       type: [Object, String],
       required: true
     },
-    tempUnit: {
-      type: String,
+    isFahrenheit: {
+      type: Boolean,
       required: false,
-      default: defaultService.tempUnit()
+      default: defaultService.isFahrenheit()
     },
     cityKey: {
       type: [String, Number],

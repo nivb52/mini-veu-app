@@ -6,6 +6,7 @@
       v-for="forecast in dailyForecasts"
       :forecast="forecast"
       :key="forecast.Date"
+      :isFahrenheit="isFahrenheit"
     />
   </div>
 </template>
@@ -29,10 +30,10 @@ export default {
       type: Object,
       required: false,
     },
-    tempUnit: {
-      type: String,
+    isFahrenheit: {
+      type: Boolean,
       required: false,
-      default: defaultService.tempUnit()
+      default: defaultService.isFahrenheit()
     }
   },
   computed: {

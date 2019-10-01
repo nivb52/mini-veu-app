@@ -1,11 +1,12 @@
 export default {
     city,
-    tempUnit
+    isFahrenheit
   };
 
   function city(){
       return {LocalizedName:  'Tel - Aviv', Key: 215854}
   }
-  function tempUnit(){
-      return ' °F'
+
+  function isFahrenheit(){
+      return true
   }

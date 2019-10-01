@@ -1,85 +1,99 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import weatherService from "@/services/weather.service.js";
-import defaultService from '@/services/default.service.js'
-import utillService from '@/services/utill.service.js'
+import defaultService from "@/services/default.service.js";
+import utillService from "@/services/utill.service.js";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    currentWeather: [] ,
-    forecastWeather: {} ,
-    favorites: utillService.getSession(), 
-    currCity: defaultService.city()
+    currentWeather: [],
+    forecastWeather: {},
+    favorites: utillService.getSession(),
+    currCity: defaultService.city(),
+    isFahrenheit: defaultService.isFahrenheit()
   },
   mutations: {
+    setTempUnit(state, context) {
+      console.log(context.isFahrenheit);
+      state.isFahrenheit = context.isFahrenheit;
+    },
     setCurrCity(state, context) {
-      state.currCity = context.pickedCity
+      state.currCity = context.pickedCity;
     },
     setCurrWeather(state, context) {
-      state.currentWeather = context.currentWeather
+      state.currentWeather = context.currentWeather;
     },
-    setForcastWeather(state, context) {  
-      state.forecastWeather = context.forecastWeather
+    setForcastWeather(state, context) {
+      state.forecastWeather = context.forecastWeather;
     },
-    setFavorites({favorites}) {
-      favorites = utillService.setSession(favorites)
+    setFavorites({ favorites }) {
+      favorites = utillService.setSession(favorites);
     },
-    addFavorites({favorites}, {clickedCity}) {
-      favorites.push(clickedCity)
+    addFavorites({ favorites }, { clickedCity }) {
+      favorites.push(clickedCity);
     },
-    removeFavorites({favorites}, {clickedCity}){
-      const cityKey = clickedCity['Key']
-      const idx = favorites.findIndex(city => city.Key === cityKey)
-      favorites.splice(idx, 1)
+    removeFavorites({ favorites }, { clickedCity }) {
+      const cityKey = clickedCity["Key"];
+      const idx = favorites.findIndex(city => city.Key === cityKey);
+      favorites.splice(idx, 1);
     }
   },
   actions: {
-    async loadWeather({commit}, {pickedCity}){
-      commit({type: 'setCurrCity', pickedCity})
+    async loadWeather({ commit }, { pickedCity }) {
+      commit({ type: "setCurrCity", pickedCity });
       try {
-        const cityKey = pickedCity ? pickedCity['Key']  : ''    
-        const currentWeather = await weatherService.currentConditions(cityKey);        
-        commit({type: 'setCurrWeather', currentWeather})
+        const cityKey = pickedCity ? pickedCity["Key"] : "";
+        const currentWeather = await weatherService.currentConditions(cityKey);
+        commit({ type: "setCurrWeather", currentWeather });
       } catch (err) {
-          throw err
+        throw err;
       }
     },
-    async loadForecast({commit}, {pickedCity}){
-    const cityKey = pickedCity ? pickedCity['Key']  : ''    
-    try {
-      const forecastWeather = await weatherService.forecasts5Days(cityKey);      
-      commit({type: 'setForcastWeather', forecastWeather})
+
+    async loadForecast({ commit }, { pickedCity }) {
+      const cityKey = pickedCity ? pickedCity["Key"] : "";
+      try {
+        const forecastWeather = await weatherService.forecasts5Days(cityKey);
+        commit({ type: "setForcastWeather", forecastWeather });
       } catch (err) {
-          throw err
+        throw err;
       }
     },
-    async changeCurrCity({commit},{pickedCity}){
-      commit({type: 'setCurrCity', pickedCity})
+
+    async changeTempUnit({ commit }, { isFahrenheit }) {
+      commit({ type: "setTempUnit", isFahrenheit });
     },
-    async likeCity({commit},{clickedCity}){
-      commit({type: 'addFavorites', clickedCity})
+    async changeCurrCity({ commit }, { pickedCity }) {
+      commit({ type: "setCurrCity", pickedCity });
     },
-    async unlikeCity({commit},{clickedCity}) {
-      commit({type: 'removeFavorites', clickedCity})
+    async likeCity({ commit }, { clickedCity }) {
+      commit({ type: "addFavorites", clickedCity });
     },
-    async loadFavorites({commit},{favorites}) {
-      commit({type: 'setFavorites'}, favorites)
+    async unlikeCity({ commit }, { clickedCity }) {
+      commit({ type: "removeFavorites", clickedCity });
+    },
+    async loadFavorites({ commit }, { favorites }) {
+      commit({ type: "setFavorites" }, favorites);
     }
   },
   getters: {
-    currentCity({currCity}) {
-      return currCity
+    tempUnitToShow({ isFahrenheit }) {
+      console.log('tempUnitToShow ',isFahrenheit);
+      return isFahrenheit;
     },
-    currentWeatherToShow({currentWeather}) {
-      return currentWeather
+    currentCity({ currCity }) {
+      return currCity;
     },
-    currentForecastToShow({forecastWeather}) {
-      return forecastWeather
+    currentWeatherToShow({ currentWeather }) {
+      return currentWeather;
     },
-    myFavorites({favorites}) {
-      return favorites
+    currentForecastToShow({ forecastWeather }) {
+      return forecastWeather;
     },
+    myFavorites({ favorites }) {
+      return favorites;
+    }
   }
 });
