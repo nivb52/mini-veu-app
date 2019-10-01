@@ -1,4 +1,6 @@
-$search_color: #fff;
+@import '../main.scss';
+$search_color : $white-color;
+
 .search {
   &__container {
     display: block;
@@ -45,4 +47,33 @@ $search_color: #fff;
       background-position: 100% center;
     }
   }
+}
+
+.autocomplete {
+  position: relative;
+}
+
+.autocomplete-results {
+  padding: 0;
+  margin: 0;
+  border: 1px solid #eeeeee;
+  overflow: auto;
+  width: 100%;
+  overflow-x: hidden;
+  z-index: 10;
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.7);
+  color:$black-color;
+}
+
+.autocomplete-result {
+  text-align: left;
+  padding: 4px 2px;
+  cursor: pointer;
+}
+
+.autocomplete-result.is-active,
+.autocomplete-result:hover {
+  background-color: #4aae9b;
+  color: $white-color;
 }
