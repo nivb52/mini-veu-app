@@ -14,6 +14,7 @@
             :weatherData="favorite.weatherData"
             :city="favorite.LocalizedName"
             :cityKey="favorite.Key"
+            :isFahrenheit="isFahrenheit"
             :style="{ backgroundColor: 'black' }"
 
           />
@@ -31,6 +32,11 @@ export default {
   name: "favorites",
   components: {
     CurrentWeather
+  },
+  data () {
+    return {
+      isFahrenheit: this.$store.getters.tempUnitToShow
+    }
   },
   created () {
     const favorites = utillService.getSession()
