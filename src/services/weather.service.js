@@ -1,7 +1,5 @@
 import secrets from "./secrets.service";
-// import { storageService } from "./storage.service";
 import http from "./http.service";
-import utillService from "./utill.service";
 
 export default {
   currentConditions,
@@ -48,30 +46,29 @@ async function autocomplete(term) {
     _errorHandeling(err);
   }
 }
-async function getLanLonWeather(pos) {
-  try {
-    const loc = await pos.coords
-    if (!loc || !loc.latitude || !loc.longitude) return
-    
-    const { latitude, longitude } = loc;
 
+
+async function getLanLonWeather(latitude, longitude) {
+  if (!latitude || !longitude) return
+  try {
     const endpoint = `locations/${VERSION}/cities/geoposition/search`;
     const data = {apikey: API, q: latitude+','+longitude}
-
     const res = await http.get(BASE_URL, endpoint, data);
-    console.log('res ',res);
-    // return res
+
     return res 
   } catch (err) {
     _errorHandeling(err);
   }
 }
 
+
 function _errorHandeling(err) {
   // if (err.status === 503)
   // if (err.status === 401)
   throw err;
 }
+
+
 function _invalideCityKey(key){
   if (typeof key !== 'number' || typeof key !== 'string') return true
 }
