@@ -46,13 +46,13 @@
   right: 55vw;
   top: 3%;
   position: absolute;
-  cursor: pointer;
 }
 .my-temp{
   right: 54vw;
 }
 
 .my-location button , .my-temp button {
+  cursor: pointer;
   color: $color-1;
   font-size: 1.5rem;
   background-color: transparent;
