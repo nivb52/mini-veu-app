@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/<niv-bekelman-24-09-19>/precache-manifest.abb488151e2e85255102147862b01362.js"
+  "/niv-bekelman-24-09-19/precache-manifest.d1ac6d6a1f3839524f81c6c285260c5d.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "wheather-app"});
