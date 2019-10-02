@@ -8,7 +8,7 @@ export default {
   getLanLonWeather
 };
 
-const BASE_URL = `http://dataservice.accuweather.com/`;
+const BASE_URL = `https://dataservice.accuweather.com/`;
 const VERSION = "v1";
 let API = secrets.api;
 
