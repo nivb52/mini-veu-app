@@ -109,7 +109,6 @@ export default {
                 pickedCity["LocalizedName"] = await res["LocalizedName"];
                 pickedCity["Key"] = await res["Key"];
                 pickedCity.Key = await res.Key;
-                console.log(pickedCity);
                 this.onPickCity(pickedCity);
               });
           });

@@ -80,7 +80,6 @@ export default new Vuex.Store({
   },
   getters: {
     tempUnitToShow({ isFahrenheit }) {
-      console.log('tempUnitToShow ',isFahrenheit);
       return isFahrenheit;
     },
     currentCity({ currCity }) {
