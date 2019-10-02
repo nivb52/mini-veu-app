@@ -10,7 +10,7 @@ export default new Vuex.Store({
   state: {
     currentWeather: [],
     forecastWeather: {},
-    favorites: utillService.getSession(),
+    favorites: utillService.getSession() || [],
     currCity: defaultService.city(),
     isFahrenheit: defaultService.isFahrenheit()
   },
