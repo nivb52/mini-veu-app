@@ -42,28 +42,29 @@
   filter: blur(10px);
 }
 
-.my-location, .my-temp {
-  right: 55vw;
-  top: 3%;
-  position: absolute;
-}
-.my-temp{
-  right: 54vw;
-}
 
-.my-location button , .my-temp button {
+.preference button {
   cursor: pointer;
-  color: $color-1;
+  color: $white-color;
   font-size: 1.5rem;
-  background-color: transparent;
+  background-color: $background_color_2;
   border: transparent;
 }
 
-@media (min-width: 600px){
-  .my-location {
-    right: 38vw;
-  }
-  .my-temp{
-    right: 37vw;
-  }
-}
+// .my-location, .my-temp {
+//   right: 55vw;
+//   top: 3%;
+//   position: absolute;
+// }
+// .my-temp{
+//   right: 54vw;
+// }
+
+// @media (min-width: 600px){
+//   .my-location {
+//     right: 38vw;
+//   }
+//   .my-temp{
+//     right: 37vw;
+//   }
+// }
