@@ -4,7 +4,7 @@
     <div class="flex centered">
       <Autocomplete @onSearch="onSearch" @onPickCity="onPickCity" :items="autocompleteItems" />
     </div>
-    <div class="my-location">
+    <div class="flex centered preference">
     <button 
     @click="getMyLoc">
       <img src="@/assets/icons/my_loc-24px.svg"  alt="get weather to your location"/>
