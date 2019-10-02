@@ -3,7 +3,7 @@
     <h1 class="title is-capitalized">my favorites cities</h1>
 
     <div>
-      <div v-if="!myFavorites" class="is-capitalized subtitle centerd">
+      <div v-if="!myFavorites[0]" class="is-capitalized subtitle centerd">
         when your add favorites you will see them here</div>
       <div class="columns is-multiline" v-else>
         <div class="column 
