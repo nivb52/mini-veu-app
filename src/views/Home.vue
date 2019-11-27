@@ -38,6 +38,7 @@ import DayForecastList from "@/cmps/DayForecastList";
 import CurrentWeather from "@/cmps/CurrentWeather";
 import Autocomplete from "@/cmps/Autocomplete";
 import weatherService from "@/services/weather.service.js";
+import { log } from 'util';
 
 export default {
   name: "home",
@@ -154,7 +155,6 @@ export default {
     },
 
     async changeIsFahrenheit(isFahrenheit){
-      if (isFahrenheit !== true && isFahrenheit !== false) return
       this.isFahrenheit = !this.isFahrenheit
       this.$store.dispatch({
         type:"changeTempUnit",

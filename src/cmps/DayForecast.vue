@@ -13,7 +13,7 @@
 
 <script>
 import utillService from "@/services/utill.service.js";
-import defaultService from "@/services/default.service.js";
+import * as config from "@/services/app.config.json";
 
 export default {
   name: "DayForecast",
@@ -26,7 +26,7 @@ export default {
     isFahrenheit: {
       type: Boolean,
       required: false,
-      default: defaultService.isFahrenheit()
+      default: JSON.parse(config.isFahrenheit)
     }
   },
   computed: {
@@ -63,27 +63,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.forecastday {
-  display: inline-grid;
-  grid-template-columns: 1fr 3fr 1fr;
-  align-items: center;
-  justify-content: space-around;
-
-  border-top: 1px solid rgba(50, 65, 70, 0.5);
-  padding: 20px 10px;
-  &:first-child {
-    border: none;
-  }
-  .weather-icon {
-    max-width: 12vw;
-  }
-
-  .day {
-    font-weight: bold;
-    text-align: center;
-  }
-}
-.temp-container {
-  width: max-content;
-}
+@import "@/assets/css/cmps/day-forecast.scss";
 </style>

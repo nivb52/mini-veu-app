@@ -12,8 +12,9 @@
 </template>
 
 <script>
-import defaultService from '@/services/default.service.js'
 import DayForecast from "@/cmps/DayForecast";
+import * as config from "@/services/app.config.json";
+
 
 export default {
   name: "DayForecastList",
@@ -33,7 +34,7 @@ export default {
     isFahrenheit: {
       type: Boolean,
       required: false,
-      default: defaultService.isFahrenheit()
+      default: JSON.parse(config.isFahrenheit)
     }
   },
   computed: {

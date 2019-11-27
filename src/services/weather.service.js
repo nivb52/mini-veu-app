@@ -1,5 +1,7 @@
-import secrets from "./secrets.service";
-import http from "./http.service";
+import http from "@/services/http.service";
+import * as secrets from "../../app.secrets.json";
+import * as config from "@/services/app.config.json";
+
 
 export default {
   currentConditions,
@@ -10,9 +12,10 @@ export default {
 
 const BASE_URL = `https://dataservice.accuweather.com/`;
 const VERSION = "v1";
-let API = secrets.api;
+let API = secrets.weather_API;
+const defaultCityKey = config.default_city.Key
 
-async function currentConditions(cityKey = 215854) {
+async function currentConditions(cityKey = defaultCityKey) {
   if (! _invalideCityKey(cityKey)) throw error('invalide key')  
 
   try {
@@ -24,7 +27,7 @@ async function currentConditions(cityKey = 215854) {
   }
 }
 
-async function forecasts5Days(cityKey = 215854) {
+async function forecasts5Days(cityKey = defaultCityKey) {
   if (! _invalideCityKey(cityKey)) throw error('invalide key') 
 
   try {

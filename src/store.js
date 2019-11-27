@@ -1,8 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import weatherService from "@/services/weather.service.js";
-import defaultService from "@/services/default.service.js";
 import utillService from "@/services/utill.service.js";
+import * as config from "@/services/app.config.json";
 
 Vue.use(Vuex);
 
@@ -11,12 +11,11 @@ export default new Vuex.Store({
     currentWeather: [],
     forecastWeather: {},
     favorites: utillService.getSession() || [],
-    currCity: defaultService.city(),
-    isFahrenheit: defaultService.isFahrenheit()
+    currCity: config.default_city,
+    isFahrenheit: JSON.parse(config.isFahrenheit)
   },
   mutations: {
     setTempUnit(state, context) {
-      console.log(context.isFahrenheit);
       state.isFahrenheit = context.isFahrenheit;
     },
     setCurrCity(state, context) {

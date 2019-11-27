@@ -20,7 +20,6 @@
     <div class="city-box">
       <h1 class="is-white is-black-bcg-transperent">{{cityName}}</h1>
     </div>
-    <error-boundary>
       <div v-if="!weatherData[0]" class="flex centered is-white">Loading ...</div>
       <div v-else>
         <div class="row">
@@ -41,20 +40,16 @@
 
         <span class="day-time">{{isDayTime}}</span>
       </div>
-    </error-boundary>
   </div>
 </template>
 
 <script>
-import defaultService from "@/services/default.service.js";
+import * as config from "@/services/app.config.json";
 import utillService from "@/services/utill.service.js";
-import ErrorBoundary from "@/cmps/helpers/ErrorBoundary.vue";
 
 export default {
   name: "currentWeather",
-  components: {
-    ErrorBoundary
-  },
+
   props: {
     weatherData: {
       type: Array,
@@ -68,7 +63,7 @@ export default {
     isFahrenheit: {
       type: Boolean,
       required: false,
-      default: defaultService.isFahrenheit()
+      default: JSON.parse(config.isFahrenheit)
     },
     cityKey: {
       type: [String, Number],
