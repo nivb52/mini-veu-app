@@ -5,7 +5,7 @@
     <div class="day">{{dayName}}</div>
 
     <div class="temp-container">
-      <span class="temp">{{maxTemp | fixed}}-{{minTemp | fixed}}</span>
+      <span class="temp">{{maxTemp | fixed}} -  {{minTemp | fixed}}</span>
       <span class="degree">&nbsp; {{getTempUnit}}</span>
     </div>
   </div>
