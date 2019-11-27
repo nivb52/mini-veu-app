@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/weather-vue-app/img/my_loc-24px.6f5e5b42.svg"
   },
   {
-    "revision": "5918a72359ed416d2b3e",
+    "revision": "e095d8f1e735aaf0303f",
     "url": "/weather-vue-app/css/app.0d252e98.css"
   },
   {
@@ -36,8 +36,8 @@ self.__precacheManifest = [
     "url": "/weather-vue-app/js/chunk-vendors.f1fe1ece.js"
   },
   {
-    "revision": "5918a72359ed416d2b3e",
-    "url": "/weather-vue-app/js/app.eb4afc46.js"
+    "revision": "e095d8f1e735aaf0303f",
+    "url": "/weather-vue-app/js/app.36fecc02.js"
   },
   {
     "revision": "b1d8966b5f7c5e756c8ab2b429a291de",
@@ -48,7 +48,7 @@ self.__precacheManifest = [
     "url": "/weather-vue-app/img/heart-multiple.f8019d77.svg"
   },
   {
-    "revision": "74bf7145501ab87d085d20ca653ffed7",
+    "revision": "7097694b398d75929ba2731756113fe4",
     "url": "/weather-vue-app/index.html"
   },
   {
