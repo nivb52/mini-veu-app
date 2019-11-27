@@ -64,7 +64,7 @@ export default {
     },
      term(val) {
       if(!val) return
-      const wantedInput = /[^A-Za-z]/ig     
+      const wantedInput = /[^A-Za-z ]/ig     
 
       const isEnglish = val.search(wantedInput)
       if (isEnglish !== -1) {
