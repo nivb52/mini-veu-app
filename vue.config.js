@@ -1,4 +1,4 @@
 module.exports = {
   lintOnSave: false,
-  publicPath: '/weather-veu-app//'
+  publicPath: '/weather-vue-app/'
 };
