@@ -1,7 +1,7 @@
 <template>
   <div class="nav">
     <div class="logo">
-      <img class="logo-img" src="img/logo.png" alt="logo" srcset="">
+      <img class="logo-img" src="img/logo1.png" alt="logo" >
     
     
     </div>
