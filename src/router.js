@@ -17,11 +17,6 @@ export default new Router({
       component: () => import("./views/Favorites.vue")
     },
     {
-      path: "/about",
-      name: "about",
-      component: () => import("./views/About.vue")
-    },
-    {
       path: "/city/key=:id?&city=:city?",
       name: "city",
       component: Home
