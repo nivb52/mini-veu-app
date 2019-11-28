@@ -1,31 +1,23 @@
 <template>
   <div class="main-container">
-    <div class="bg-image" :style="{ backgroundImage: 'url(' + getBgImg + ')' }"></div>
+    <div class="bg-image" :style="{ backgroundImage: 'url(bgimg/'+ bgImg +'.jpg)' }"></div>
     <div class="flex centered">
       <Autocomplete @onSearch="onSearch" @onPickCity="onPickCity" :items="autocompleteItems" />
     </div>
     <div class="flex centered preference">
-    <button 
-    @click="getMyLoc">
-      <img src="@/assets/icons/my_loc-24px.svg"  alt="get weather to your location"/>
-    </button>
-    <button  v-if="isFahrenheit"
-    @click="changeIsFahrenheit(false)">
-     °F
-    </button>
-    <button  v-else
-    @click="changeIsFahrenheit(true)">
-     °C
-    </button>
+      <button @click="getMyLoc">
+        <img src="@/assets/icons/my_loc-24px.svg" alt="get weather to your location" />
+      </button>
+      <button v-if="isFahrenheit" @click="changeIsFahrenheit(false)">°F</button>
+      <button v-else @click="changeIsFahrenheit(true)">°C</button>
     </div>
 
-    
     <div class="weather-container">
       <CurrentWeather
         :city="city"
         :isFahrenheit="isFahrenheit"
         :weatherData="weatherData"
-        :style="{ backgroundImage: 'url(' + getBgImg + ')' }"
+        :style="{ backgroundImage: 'url(bgimg/'+ bgImg +'.jpg)' }"
       />
 
       <day-forecast-list :city="city" :forecastData="forecastData" :isFahrenheit="isFahrenheit" />
@@ -38,19 +30,19 @@ import DayForecastList from "@/cmps/DayForecastList";
 import CurrentWeather from "@/cmps/CurrentWeather";
 import Autocomplete from "@/cmps/Autocomplete";
 import weatherService from "@/services/weather.service.js";
-import { log } from 'util';
 
 export default {
   name: "home",
   components: {
     DayForecastList,
     CurrentWeather,
-    Autocomplete,
+    Autocomplete
   },
   data() {
     return {
       autocompleteItems: [],
-       isFahrenheit: this.$store.getters.tempUnitToShow
+      isFahrenheit: this.$store.getters.tempUnitToShow,
+      bgImg: "clear.jpg"
     };
   },
   async created() {
@@ -83,9 +75,10 @@ export default {
     weatherData() {
       return this.$store.getters.currentWeatherToShow;
     },
-    getBgImg() {
-      return "bgimg/sunny.jpg";
+    async getBgImg() {
+      return this.bgImg;
     },
+
     city() {
       if (typeof this.$route.params.city === String) {
         const currentCity = {
@@ -120,14 +113,18 @@ export default {
     },
     async onSearch(term) {
       if (!term || this.cityKey) return;
-      const cityItems = await weatherService.autocomplete(term);
+      try {
+        const cityItems = await weatherService.autocomplete(term);
 
-      this.autocompleteItems = cityItems.map(item => {
-        let city = {};
-        city['LocalizedName'] = item['LocalizedName'];
-        city['Key'] = item['Key'];
-        return city;
-      });
+        this.autocompleteItems = cityItems.map(item => {
+          let city = {};
+          city["LocalizedName"] = item["LocalizedName"];
+          city["Key"] = item["Key"];
+          return city;
+        });
+      } catch (err) {
+        this.createToast();
+      }
     },
 
     async onPickCity(pickedCity) {
@@ -154,14 +151,49 @@ export default {
       }
     },
 
-    async changeIsFahrenheit(isFahrenheit){
-      this.isFahrenheit = !this.isFahrenheit
+    async changeIsFahrenheit(isFahrenheit) {
+      this.isFahrenheit = !this.isFahrenheit;
       this.$store.dispatch({
-        type:"changeTempUnit",
+        type: "changeTempUnit",
         isFahrenheit
-      })
-
+      });
     }
+  },
+  async mounted() {
+    setTimeout(async () => {
+      // we first want to load the website and data and then decide with picture to use
+      // if we load it too fast, we can end up with 2 images loaded
+      // and bad user expirance -  600 ,mil'sec delay should fix it
+      try {
+        let imgName = "clear"; // default
+        const data = await this.$store.getters.currentWeatherToShow;
+        const { HasPrecipitation, WeatherText, Temperature } = await data[0];
+        const timePrefix = data[0].IsDayTime ? "-day" : "-night";
+        // we set default in case no temp obj
+        // so we will use only the includes if
+        const temp = Temperature ? Temperature.Metric.Value : 24;
+        if (temp < -6) imgName = "snow";
+        else if (temp < 1) imgName = "snow-light";
+        else if (temp < 3 && HasPrecipitation) imgName = "ice-pellets";
+        else if (temp < 8 && HasPrecipitation)
+          imgName = "heavy-rain" + timePrefix;
+        else if (temp < 13 && HasPrecipitation)
+          imgName = "light-rain" + timePrefix;
+        else if (WeatherText) {
+          if (WeatherText.toLowerCase().includes("cloud")) {
+            imgName = "partly-cloudy" + timePrefix;
+          } else if (WeatherText.toLowerCase().includes("fog")) {
+            imgName = "fog" + timePrefix;
+          } else if (WeatherText.toLowerCase().includes("sun")) {
+            imgName = "sunny";
+          }
+        } else if (temp < 8) imgName = "thunder";
+        else if (temp > 25) imgName = "sunny";
+        this.bgImg = imgName;
+      } catch (e) {
+        console.log(e);
+      }
+    }, 600);
   }
 };
 </script>
