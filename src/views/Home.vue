@@ -75,10 +75,6 @@ export default {
     weatherData() {
       return this.$store.getters.currentWeatherToShow;
     },
-    async getBgImg() {
-      return this.bgImg;
-    },
-
     city() {
       if (typeof this.$route.params.city === String) {
         const currentCity = {
@@ -89,6 +85,9 @@ export default {
       } else {
         return this.$store.getters.currentCity;
       }
+    },
+    async getBgImg() {
+      return this.bgImg;
     }
   },
   methods: {
@@ -157,18 +156,22 @@ export default {
         type: "changeTempUnit",
         isFahrenheit
       });
-    }
-  },
-  async mounted() {
-    setTimeout(async () => {
-      // we first want to load the website and data and then decide with picture to use
-      // if we load it too fast, we can end up with 2 images loaded
-      // and bad user expirance -  600 ,mil'sec delay should fix it
+    },
+    async setBgImg() {
       try {
+        let weatherData = await this.weatherData;
+        if (!weatherData) {
+          weatherData = await this.$store.getters.currentWeatherToShow;
+        }
+
+        // start the logic
         let imgName = "clear"; // default
-        const data = await this.$store.getters.currentWeatherToShow;
-        const { HasPrecipitation, WeatherText, Temperature } = await data[0];
-        const timePrefix = data[0].IsDayTime ? "-day" : "-night";
+        const {
+          HasPrecipitation,
+          WeatherText,
+          Temperature
+        } = await weatherData[0];
+        const timePrefix = weatherData[0].IsDayTime ? "-day" : "-night";
         // we set default in case no temp obj
         // so we will use only the includes if
         const temp = Temperature ? Temperature.Metric.Value : 24;
@@ -193,7 +196,15 @@ export default {
       } catch (e) {
         console.log(e);
       }
-    }, 600);
+    }
+  },
+  async mounted() {
+    this.setBgImg();
+  },
+  watch: {
+    weatherData: function() {
+      this.setBgImg();
+    }
   }
 };
 </script>
