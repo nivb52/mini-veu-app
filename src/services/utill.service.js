@@ -1,7 +1,9 @@
 export default {
   dayNameFromUTC,
   setSession,
-  getSession
+  getSession,
+  storageStore,
+  storageLoad
 };
 
 function dayNameFromUTC(day) {
@@ -22,5 +24,16 @@ async function setSession(data, key = "favorites") {
 }
 function getSession(key = "favorites") {
   return JSON.parse(sessionStorage.getItem(key)) || null;
+}
+
+
+function storageStore(key, data) {
+    localStorage[key] = JSON.stringify(data)
+}
+
+function storageLoad(key) {
+  var str = localStorage[key] || "null";
+  if (str === "undefined") return false;
+  else return JSON.parse(str);
 }
 
