@@ -66,7 +66,7 @@ async function getLanLonWeather(latitude, longitude) {
 
 
 function _errorHandeling(err) {
-  // if (err.status === 503)
+  // if (err.status === 503) 
   // if (err.status === 401)
   throw err;
 }
