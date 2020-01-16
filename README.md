@@ -1,4 +1,8 @@
 # wheather-app
+## Project Link
+```
+ Your site is published at https://nivb52.github.io/weather-vue-app/
+```
 
 ## Project setup
 ```
@@ -9,21 +13,3 @@ npm install
 ```
 npm run serve
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
