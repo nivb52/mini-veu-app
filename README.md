@@ -1,8 +1,7 @@
-# wheather-app
+# weather-app in Vue JS
 ## Project Link
-```
- Your site is published at https://nivb52.github.io/weather-vue-app/
-```
+ https://nivb52.github.io/weather-vue-app/
+
 
 ## Project setup
 ```
